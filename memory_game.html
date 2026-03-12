@@ -273,15 +273,51 @@ body::before {
 
 /* ── Responsive grids ── */
 .grid-2 { grid-template-columns: repeat(2, 1fr); max-width: 260px; }
-.grid-3 { grid-template-columns: repeat(3, 1fr); max-width: 360px; }
-.grid-4 { grid-template-columns: repeat(4, 1fr); max-width: 480px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); max-width: 380px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); max-width: 520px; }
 
-@media (max-width: 500px) {
-  .grid-3 { gap: 6px; }
-  .grid-4 { gap: 5px; }
+/* ── Landscape hint banner (level 3 on narrow screens) ── */
+#landscapeHint {
+  display: none;
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,105,180,0.9);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  z-index: 35;
+  white-space: nowrap;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  animation: fadeInUp 0.4s ease;
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Portrait + narrow → shrink cards so 4×4 fits on screen */
+@media (max-width: 540px) {
+  .grid-2 { max-width: 220px; gap: 8px; }
+  .grid-3 { max-width: 320px; gap: 6px; }
+  .grid-4 { max-width: 100%; gap: 4px; }
   .card-back { font-size: 1rem; }
-  #board { padding: 5px; }
-  #hud { gap: 8px; padding: 8px 10px; }
+  #board { padding: 4px; }
+  #hud { gap: 6px; padding: 7px 8px; }
+  .hud-item { padding: 6px 10px; font-size: 0.78rem; }
+}
+
+/* Landscape on small screens → reclaim height, spread cards wide */
+@media (max-height: 500px) and (orientation: landscape) {
+  #hud { padding: 5px 10px; }
+  .hud-item { padding: 4px 10px; font-size: 0.78rem; }
+  #gameArea { padding: 6px; min-height: unset; }
+  .grid-4 { max-width: 100vw; gap: 5px; }
+  .card { aspect-ratio: 4 / 3; }   /* wider cards in landscape */
+  #landscapeHint { display: none !important; }
 }
 
 /* end screen extras */
@@ -325,6 +361,9 @@ body::before {
   <p class="end-msg" id="endSubtitle"></p>
   <button class="btn btn-restart" onclick="restartGame()">Play Again 🔄</button>
 </div>
+
+<!-- ══ LANDSCAPE HINT ══ -->
+<div id="landscapeHint">📱 Rotate to landscape for best view!</div>
 
 <!-- ══ CONFETTI ══ -->
 <canvas id="confettiCanvas"></canvas>
@@ -431,6 +470,14 @@ function pickImages(pairsNeeded) {
 }
 
 function buildBoard(levelIdx) {
+  // Show landscape hint only for level 3 on narrow portrait screens
+  const hint = document.getElementById("landscapeHint");
+  if (levelIdx === 2 && window.innerWidth < 540 && window.innerHeight > window.innerWidth) {
+    hint.style.display = "block";
+    setTimeout(() => { hint.style.display = "none"; }, 4000);
+  } else {
+    hint.style.display = "none";
+  }
   const lvl = LEVELS[levelIdx];
   totalPairs = lvl.pairs;
   matchedPairs = 0;
@@ -587,10 +634,10 @@ function endGame(won) {
 
   if (won) {
     sfxWin();
-    document.getElementById("endTitle").textContent = "🎉 Happy Birthday Shane! 🎂";
+    document.getElementById("endTitle").textContent = "🎉 Happy Birthday Shane! 🎂 💖";
     document.getElementById("endSubtitle").textContent = "You completed all levels in " + moves + " moves!";
   } else {
-    document.getElementById("endTitle").textContent = "Game Over! 🎂 Happy Birthday Shane!";
+    document.getElementById("endTitle").textContent = "Game Over! 🎂 Happy Birthday Shane! 💖";
     document.getElementById("endSubtitle").textContent = "Time's up! You reached Level " + (currentLevel + 1) + " with " + moves + " moves.";
   }
 
