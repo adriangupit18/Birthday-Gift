@@ -272,13 +272,13 @@ body::before {
 }
 
 /* ── Responsive grids ── */
-.grid-4 { grid-template-columns: repeat(4, 1fr); max-width: 420px; }
-.grid-6 { grid-template-columns: repeat(6, 1fr); max-width: 550px; }
-.grid-8 { grid-template-columns: repeat(8, 1fr); max-width: 700px; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); max-width: 260px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); max-width: 360px; }
+.grid-4 { grid-template-columns: repeat(4, 1fr); max-width: 480px; }
 
 @media (max-width: 500px) {
-  .grid-6 { gap: 5px; }
-  .grid-8 { gap: 3px; max-width: 100%; }
+  .grid-3 { gap: 6px; }
+  .grid-4 { gap: 5px; }
   .card-back { font-size: 1rem; }
   #board { padding: 5px; }
   #hud { gap: 8px; padding: 8px 10px; }
@@ -299,7 +299,7 @@ body::before {
   <h1>🎂 Shane's Memory Game 🎈</h1>
   <p>Match pairs of Shane's photos before time runs out!<br>
     You start with <strong>60 seconds</strong>. Each correct match adds <strong>+1 second</strong>.<br>
-    Complete all 3 levels to win!</p>
+    Level 1: 2×2 &nbsp;|&nbsp; Level 2: 3×3 &nbsp;|&nbsp; Level 3: 4×4. Complete all 3 to win!</p>
   <button class="btn btn-play" onclick="startGame()">Play 🎮</button>
 </div>
 
@@ -352,9 +352,9 @@ const IMAGE_POOL = [
 //   LEVELS CONFIG
 // ═══════════════════════════════════════
 const LEVELS = [
-  { cols: 4, rows: 4, pairs: 8  },
-  { cols: 6, rows: 6, pairs: 18 },
-  { cols: 8, rows: 8, pairs: 32 }
+  { cols: 2, rows: 2, pairs: 2 },
+  { cols: 3, rows: 3, pairs: 4 },
+  { cols: 4, rows: 4, pairs: 8 }
 ];
 
 const START_TIME = 60;
